@@ -1,0 +1,26 @@
+actions:
+  - name: rest_post
+    file: http_rest.py
+    method: send_post
+    parameters:
+      - url
+        data
+  - name: rest_put
+    file: http_rest.py
+    method: send_put
+
+lights:
+  - name: fan
+    type: fan
+    set:
+      action: rest_post
+      parameters:
+        url: http://192.168.54.78:5000/api/v1/fan
+        data_on:
+          level: 3
+        data_off:
+          level: 1
+    get:
+      action: rest_get
+      parameters:
+        url: http://192.168.54.78:5000/api/v1/fan

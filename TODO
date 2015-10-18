@@ -1,0 +1,6 @@
+* implement uPNP messages (first version done)
+* implement flask web service as bridge API (base done)
+* implement json config reading (re-read on change)
+* implement actions for (on/off, color, ..)
+  * implement HTTP action (method, url, data)
+
