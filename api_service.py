@@ -23,16 +23,12 @@ for lamp in config['lights']:
     index += 1
 
 
-def get_action(action_name, action_type):
-    result = None
-    for action in config['actions']:
-        if action['name'] == action_name:
-            result = action[action_type]
-            module_name = action['file'].replace('.py', '')
-            action_module = imp.load_source(module_name, 'actions/' + action['file'])
-            action_method = getattr(action_module, action['method'])
-            result['method'] = action_method
-            break
+def get_action(lamp_index, action_type):
+    result = lamp_status[lamp_index]['data'][action_type]
+    module_name = result['file'].replace('.py', '')
+    action_module = imp.load_source(module_name, 'actions/' + result['file'])
+    action_method = getattr(action_module, result['method'])
+    result['method'] = action_method
     return result
 
 
@@ -127,7 +123,7 @@ def switch_light(username, index):
     logger.info('switch_light: username={user}, index={idx}, data={data}, state={state}'.format(
         user=username, idx=index, data=request.get_data(), state=request.form.get("on")))
     state = json.loads(request.get_data())
-    action = get_action(lamp_status[index]['data']['action'], 'set')
+    action = get_action(index, 'set')
     kwargs = action['parameters']
     result = action['method'](state=state['on'], **kwargs)
     logger.debug('switch_light: result: {result}'.format(result=result))
